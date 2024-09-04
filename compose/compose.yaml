@@ -1,0 +1,53 @@
+
+
+version: '3'
+
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ${HA_CONFIG_FOLDER}:/config
+      - /etc/localtime:/etc/localtime:ro
+      - ${HA_DATA_FOLDER}:/media
+    restart: unless-stopped
+    privileged: true
+    network_mode: host
+
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ${MOSQUITTO_DATA_FOLDER}/config:/mosquitto/config
+      - ${MOSQUITTO_DATA_FOLDER}/data:/mosquitto/data
+      - ${MOSQUITTO_DATA_FOLDER}/log:/mosquitto/log
+    environment:
+      - TZ=Europe/Brussels
+    user: "mosquitto:1883"
+
+  nodered:
+      container_name: nodered
+      image: nodered/node-red
+      ports:
+        - 1880:1880
+      volumes:
+        - ${NODERED_DATA_FOLDER}:/data
+      depends_on:
+        - homeassistant
+        - mosquitto
+      environment:
+        - TZ=Europe/Brussels
+      restart: unless-stopped
+
+  hass-configurator:
+    image: "causticlab/hass-configurator-docker:latest"
+    restart: always
+    ports:
+      - "3218:3218/tcp"
+    volumes:
+      - ${CONFIGURATOR_CONFIG_FOLDER}/configurator-config:/config
+      - ${HA_CONFIG_FOLDER}:/hass-config
