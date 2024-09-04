@@ -1,0 +1,8 @@
+# add the following lines to the hosts file 
+# C:\Windows\System32\drivers\etc\hosts
+
+
+#added by Koen
+192.168.0.94 raspberry-ha-1.local
+192.168.0.68 raspberry-ha-2.local
+
