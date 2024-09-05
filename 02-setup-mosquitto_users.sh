@@ -8,4 +8,5 @@ sudo chown -R mosquitto: $MOSQUITTO_DATA_FOLDER
 # https://github.com/sukesh-ak/setup-mosquitto-with-docker
 
 
-
+# After setup: connect to the mosquitto container
+# docker exec -it <container-id> sh
