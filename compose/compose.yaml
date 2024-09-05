@@ -22,26 +22,25 @@ services:
       - 1883:1883
       - 9001:9001
     volumes:
-      - ${MOSQUITTO_DATA_FOLDER}/config:/mosquitto/config
-      - ${MOSQUITTO_DATA_FOLDER}/data:/mosquitto/data
-      - ${MOSQUITTO_DATA_FOLDER}/log:/mosquitto/log
+      - /home/koen/Data/mosquitto/config:/mosquitto/config:rw
+      - /home/koen/Data/mosquitto/data:/mosquitto/data
+      - /home/koen/Data/mosquitto/log:/mosquitto/log
     environment:
       - TZ=Europe/Brussels
-    user: "mosquitto:1883"
 
-  nodered:
-      container_name: nodered
-      image: nodered/node-red
-      ports:
-        - 1880:1880
-      volumes:
-        - ${NODERED_DATA_FOLDER}:/data
-      depends_on:
-        - homeassistant
-        - mosquitto
-      environment:
-        - TZ=Europe/Brussels
-      restart: unless-stopped
+#  nodered:
+#      container_name: nodered
+#      image: nodered/node-red
+#      ports:
+#        - 1880:1880
+#      volumes:
+#        - ${NODERED_DATA_FOLDER}:/data
+#      depends_on:
+#        - homeassistant
+#        - mosquitto
+#      environment:
+#        - TZ=Europe/Brussels
+#      restart: unless-stopped
 
   hass-configurator:
     image: "causticlab/hass-configurator-docker:latest"
